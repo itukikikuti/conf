@@ -1,1 +1,33 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: ${VM_HOSTNAME} # ホスト名はスクリプトで設定されるため、ここでは不要かもしれないが念のため
+    # username: がここにあった場合、スクリプトで上書きまたは追加されます
+    # password: がここにあった場合、スクリプトで上書きまたは追加されます
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+    toggle: null
+  network:
+    version: 2
+    ethernets:
+      enp1s0: # ネットワークインターフェース名 (ProxmoxのVM設定によって異なる場合があります)
+        dhcp4: true
+        # 固定IPアドレスの例:
+        # addresses:
+        #   - 192.168.1.101/24
+        # gateway4: 192.168.1.1
+        # nameservers:
+        #   addresses: [8.8.8.8, 8.8.4.4]
+  ssh:
+    install-server: true
+    authorized-keys:
+      - # あなたの公開SSHキー
 
+runcmd:
+  - apt update
+  - apt upgrade -y
+  - apt autoremove -y
+  - systemctl restart ssh
+  - echo "Cloud-init finished successfully." > /var/log/cloud-init-status.log
