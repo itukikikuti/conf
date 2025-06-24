@@ -65,15 +65,15 @@ CLOUD_INIT_FINAL_PATH="/var/tmp/cloud-config-${NEW_VMID}.yaml"
 cp /var/tmp/cloud-config-base.yaml ${CLOUD_INIT_FINAL_PATH}
 
 # ユーザー名とパスワードを挿入
-sed -i "s/username:/username: ${CI_USERNAME}/" ${CLOUD_INIT_FINAL_PATH}
-sed -i "s/password:/password: ${CI_PASSWORD_HASH}/" ${CLOUD_INIT_FINAL_PATH}
+sed -i "s/CI_USERNAME/${CI_USERNAME}/" ${CLOUD_INIT_FINAL_PATH}
+sed -i "s/CI_PASSWORD_HASH/${CI_PASSWORD_HASH}/" ${CLOUD_INIT_FINAL_PATH}
 
 # ネットワーク設定を挿入
 # 既存の network: セクションを置換する例。Cloud-init YAMLの構造によっては調整が必要。
 # 通常のcloud-config.yamlのnetworkセクションは以下のようになるはずなので、それに合わせて置換。
-sed -i "s/addresses:/addresses:\n          - ${VM_IP_ADDRESS}/" ${CLOUD_INIT_FINAL_PATH}
-sed -i "s/gateway4:/gateway4: ${VM_GATEWAY}/" ${CLOUD_INIT_FINAL_PATH}
-sed -i "s/nameservers:/nameservers:\n          addresses: [${VM_DNS_SERVERS}]/" ${CLOUD_INIT_FINAL_PATH}
+sed -i "s/VM_IP_ADDRESS/${VM_IP_ADDRESS}/" ${CLOUD_INIT_FINAL_PATH}
+sed -i "s/VM_GATEWAY/${VM_GATEWAY}/" ${CLOUD_INIT_FINAL_PATH}
+sed -i "s/VM_DNS_SERVERS/${VM_DNS_SERVERS}/" ${CLOUD_INIT_FINAL_PATH}
 
 echo "Cloud-init設定ファイルにユーザー名、パスワード、ロケール、キーボード、ネットワーク設定を挿入しました。"
 
