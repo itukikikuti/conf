@@ -8,8 +8,7 @@ ENV LC_ALL=ja_JP.UTF-8
 EXPOSE 5901
 
 RUN apt-get update && \
-    apt-get install -y sudo wget nano tigervnc-standalone-server tigervnc-common xfce4 xfce4-goodies dbus-x11 fonts-vlgothic fonts-ipafont fonts-ipaexfont && \
-    locales && \
+    apt-get install -y sudo wget nano tigervnc-standalone-server tigervnc-common xfce4 xfce4-goodies dbus-x11 locales fonts-vlgothic fonts-ipafont fonts-ipaexfont && \
     locale-gen ja_JP.UTF-8 && \
     update-locale LANG=ja_JP.UTF-8 && \
     apt-get clean && \
