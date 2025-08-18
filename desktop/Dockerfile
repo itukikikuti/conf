@@ -5,32 +5,33 @@ ENV LANG=ja_JP.UTF-8
 ENV LANGUAGE=ja_JP:ja
 ENV LC_ALL=ja_JP.UTF-8
 
-EXPOSE 5901
+EXPOSE 3389
 
 RUN apt-get update && \
-    apt-get install -y sudo wget nano tigervnc-standalone-server tigervnc-common xfce4 xfce4-goodies dbus-x11 locales fonts-vlgothic fonts-ipafont fonts-ipaexfont && \
+    apt-get install -y \
+    sudo \
+    wget \
+    nano \
+    xfce4 \
+    xfce4-goodies \
+    dbus-x11 \
+    locales \
+    fonts-vlgothic \
+    fonts-ipafont \
+    fonts-ipaexfont \
+    xrdp \
+    xorgxrdp && \
     locale-gen ja_JP.UTF-8 && \
     update-locale LANG=ja_JP.UTF-8 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN echo "ubuntu:password" | chpasswd && \
     usermod -aG sudo ubuntu
 
+RUN echo "startxfce4" > /home/ubuntu/.xsession && \
+    chown ubuntu:ubuntu /home/ubuntu/.xsession
+    
 USER ubuntu
 WORKDIR /home/ubuntu
 
-RUN mkdir -p .vnc && \
-    (echo "password"; echo "password") | vncpasswd -f > .vnc/passwd && \
-    chmod 600 .vnc/passwd
-
-RUN echo '#!/bin/sh' > .vnc/xstartup && \
-    echo 'export LANG=ja_JP.UTF-8' >> .vnc/xstartup && \
-    echo 'export LANGUAGE=ja_JP:ja' >> .vnc/xstartup && \
-    echo 'export LC_ALL=ja_JP.UTF-8' >> .vnc/xstartup && \
-    echo 'unset SESSION_MANAGER' >> .vnc/xstartup && \
-    echo 'unset DBUS_SESSION_BUS_ADDRESS' >> .vnc/xstartup && \
-    echo 'startxfce4' >> .vnc/xstartup && \
-    chmod +x .vnc/xstartup
-
-CMD ["/bin/sh", "-c", "vncserver :1 -localhost no -rfbport 5901 && tail -f /home/ubuntu/.vnc/*.log"]
+CMD ["/bin/sh", "-lc", "/usr/sbin/xrdp-sesman && exec /usr/sbin/xrdp -n"]
