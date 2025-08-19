@@ -34,4 +34,4 @@ RUN echo "startxfce4" > /home/ubuntu/.xsession && \
 USER ubuntu
 WORKDIR /home/ubuntu
 
-CMD ["/bin/sh", "-lc", "/usr/sbin/xrdp-sesman && exec /usr/sbin/xrdp -n"]
+CMD ["/usr/sbin/xrdp, "-n", "-s"]
