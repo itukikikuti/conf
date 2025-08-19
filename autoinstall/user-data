@@ -1,0 +1,54 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: server
+    username: itukikikuti
+    password: "$6$gPP5jQLwFwpt7o0X$CQke0oqGD.ZY/SAX5F4K62ynd.dVZh7DkV6sgCqwi1A6LBThHAYnczCxo0ayQfG.yO.syoOK.CoN/GKzL.1SI/" # openssl passwd -6 "pass"
+  locale: ja_JP.UTF-8
+  keyboard:
+    layout: jp
+  ssh:
+    install-server: true
+    allow-pw: true
+  network:
+    ethernets:
+      enp0s3:
+        dhcp4: false
+        addresses:
+          - 10.0.0.10/24
+        routes:
+          - to: default
+            via: 10.0.0.1
+        nameservers:
+          addresses:
+            - 8.8.8.8
+            - 8.8.4.4
+    version: 2
+  storage:
+    config:
+      - pci_address: '0000:00:03.0'
+        wipe: superblock
+        preserve: false
+        type: disk
+        id: disk-sda
+      - path: /
+        preserve: false
+        type: partition
+        id: partition-root
+        device: disk-sda
+      - path: /
+        preserve: false
+        type: format
+        id: format-root
+        fstype: ext4
+        device: partition-root
+  packages:
+    - language-pack-ja
+  users:
+    - name: itukikikuti
+      groups: users, sudo
+      shell: /bin/bash
+      sudo: ALL=(ALL) NOPASSWD:ALL
+  power-state:
+    mode: reboot
