@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  guacd:
+    image: guacamole/guacd
+    ports:
+      - "4822:4822" # 必要であれば、外部からguacdに接続するためにポートを公開
+    restart: unless-stopped
+    #network_mode: "host"
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 1783 # ⚠️ 強力なパスワードに変更してください
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_user
+      MYSQL_PASSWORD: 1783 # ⚠️ 強力なパスワードに変更してください
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    #network_mode: "host"
+
+  guacamole:
+    image: guacamole/guacamole
+    links:
+      - guacd
+      - mysql
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: mysql
+      MYSQL_DATABASE: guacamole_db
+      MYSQL_USER: guacamole_user
+      MYSQL_PASSWORD: 1783 # ⚠️ mysqlサービスと同じパスワードを設定
+    #network_mode: "host"
+    ports:
+      - "8080:8080" # Guacamole Web UIへのアクセスポート
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
