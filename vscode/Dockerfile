@@ -3,7 +3,7 @@
 # docker logs code-tunnel で出てくるURLにアクセスして認証する
 FROM ubuntu:24.04
 
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # 公式ドキュメントのインストール方法を参考にした
 # https://code.visualstudio.com/docs/setup/linux
@@ -35,10 +35,13 @@ RUN mkdir -p /home/vscode/.vscode-user-data && \
 USER ubuntu
 WORKDIR /home/ubuntu
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
-    source ~/.bashrc && \
-    nvm install --lts && \
-    npm install -g @google/gemini-cli
+ENV BASH_ENV /home/ubuntu/.bash_env
+RUN touch "${BASH_ENV}"
+RUN echo '. "${BASH_ENV}"' >> ~/.bashrc
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | PROFILE="${BASH_ENV}" bash
+RUN echo node > .nvmrc
+RUN nvm install
+RUN npm install -g @google/gemini-cli
 
 RUN /usr/bin/code tunnel --help
 
