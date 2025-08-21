@@ -35,11 +35,11 @@ RUN mkdir -p /home/vscode/.vscode-user-data && \
 USER ubuntu
 WORKDIR /home/ubuntu
 
-RUN /usr/bin/code tunnel --help
-
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
     source ~/.bashrc && \
     nvm install --lts && \
     npm install -g @google/gemini-cli
+
+RUN /usr/bin/code tunnel --help
 
 CMD ["/usr/bin/code", "tunnel", "--accept-server-license-terms"]
