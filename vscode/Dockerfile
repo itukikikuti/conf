@@ -1,4 +1,4 @@
-# docker build --no-cache -t code-tunnel .
+# docker build --no-cache -t code-tunnel https://github.com/itukikikuti/conf.git#main:vscode
 # docker run -d --name code-tunnel --hostname vscode code-tunnel
 # docker logs code-tunnel で出てくるURLにアクセスして認証する
 FROM ubuntu:24.04
