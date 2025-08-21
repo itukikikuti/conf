@@ -35,4 +35,9 @@ WORKDIR /home/ubuntu
 
 RUN /usr/bin/code tunnel --help
 
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    source ~/.bashrc && \
+    nvm install --lts && \
+    npm install -g @google/gemini-cli
+
 CMD ["/usr/bin/code", "tunnel", "--accept-server-license-terms"]
