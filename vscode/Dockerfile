@@ -3,6 +3,8 @@
 # docker logs code-tunnel で出てくるURLにアクセスして認証する
 FROM ubuntu:24.04
 
+SHELL ["/bin/bash", "-c"]
+
 # 公式ドキュメントのインストール方法を参考にした
 # https://code.visualstudio.com/docs/setup/linux
 # apt-transport-httpsはHTTPS経由でのパッケージ取得に必要
