@@ -9,7 +9,7 @@ FROM ubuntu:24.04
 # https://code.visualstudio.com/docs/setup/linux
 # apt-transport-httpsはHTTPS経由でのパッケージ取得に必要
 RUN apt-get update && \
-    apt-get install -y sudo wget openssh-client gpg apt-transport-https
+    apt-get install -y sudo wget git openssh-client gpg apt-transport-https
 
 RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
     install -D -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/microsoft.gpg && \
